@@ -61,6 +61,8 @@ flutter:
   assets:
     - assets/dices/
     - assets/W4-assets/
+    - assets/ex4/
+    - assets/w4-s2/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
