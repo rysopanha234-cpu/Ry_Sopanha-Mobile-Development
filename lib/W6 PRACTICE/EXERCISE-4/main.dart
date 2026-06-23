@@ -1,72 +1,48 @@
 import 'package:flutter/material.dart';
+import 'data/joke_data.dart';
+import 'ui/screen/joke_card.dart';
 
 Color appColor = Colors.green[300] as Color;
 
-void main() => runApp(MaterialApp(
-      home: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          backgroundColor: appColor,
-          title: const Text("Favorite Jokes"),
-        ),
-        body: const Column(
-          children: [FavoriteCard(), FavoriteCard(), FavoriteCard()],
-        ),
-      ),
-    ));
+void main() => runApp(
+  const MaterialApp(debugShowCheckedModeBanner: false, home: JokeScreen()),
+);
 
-class FavoriteCard extends StatefulWidget {
-  const FavoriteCard({
-    super.key,
-  });
+class JokeScreen extends StatefulWidget {
+  const JokeScreen({super.key});
 
   @override
-  State<FavoriteCard> createState() => _FavoriteCardState();
+  State<JokeScreen> createState() => _JokeScreenState();
 }
 
-class _FavoriteCardState extends State<FavoriteCard> {
-  bool _isFavorite = false;
+class _JokeScreenState extends State<JokeScreen> {
+  int _favoriteIndex = -1;
 
-  void onFavoriteClick() {
+  
+  void onFavoriteClick(int index) {
     setState(() {
-      _isFavorite = !_isFavorite;
+      _favoriteIndex =  index;
     });
   }
- 
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        border: Border(
-          bottom: BorderSide(width: .5, color: Colors.grey),
-        ),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: appColor,
+        title: const Text("Favorite Jokes"),
       ),
-      padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-           Expanded(
-            flex: 7,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'title',
-                  style: TextStyle(
-                      color: appColor, fontWeight: FontWeight.w800),
-                ),
-                const SizedBox(height: 10.0),
-                const Text('description')
-              ],
-            ),
-          ),
-          IconButton(
-              onPressed: onFavoriteClick,
-              icon: Icon(
-                _isFavorite ? Icons.favorite : Icons.favorite_border,
-                color: _isFavorite ? Colors.red : Colors.grey,
-              ))
-        ],
+      body: ListView.builder(
+        itemCount: jokes.length,
+        itemBuilder: (context, index) {
+          return JokeCard(
+            joke: jokes[index],
+            index: index,
+            isFavorite: _favoriteIndex == index,
+            onFavoriteClick: () => onFavoriteClick(index),
+          );
+        },
       ),
     );
   }

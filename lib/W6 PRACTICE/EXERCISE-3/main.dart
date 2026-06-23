@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'ui/screens/temperature_screen.dart';
 import 'ui/screens/welcome_screen.dart';
+import 'ui/screens/bye_bye_screen.dart';
 
 class TemperatureApp extends StatefulWidget {
   const TemperatureApp({super.key});
@@ -11,8 +12,11 @@ class TemperatureApp extends StatefulWidget {
   }
 }
 
+//use enum
+enum Screen { welcome, converter, byebye }
+
 class _TemperatureAppState extends State<TemperatureApp> {
-  bool _showConverter = false;
+  Screen _currentScreen = Screen.welcome;
 
   @override
   Widget build(context) {
@@ -26,16 +30,34 @@ class _TemperatureAppState extends State<TemperatureApp> {
               end: Alignment.bottomRight,
             ),
           ),
-
-          child: _showConverter
-              ? TemperatureScreen()
-              : WelcomeScreen(
-                  onStart: () {
-                    setState(() {
-                      _showConverter = true;
-                    });
-                  },
-                ),
+          child: switch (_currentScreen) {
+            Screen.welcome => WelcomeScreen(
+              onStart: () {
+                setState(() {
+                  _currentScreen = Screen.converter;
+                });
+              },
+            ),
+            Screen.converter => TemperatureScreen(
+              onDone: () {
+                setState(() {
+                  _currentScreen = Screen.byebye;
+                });
+              },
+              onBack: () {
+                setState(() {
+                  _currentScreen = Screen.welcome;
+                });
+              },
+            ),
+            Screen.byebye => ByeByeScreen(
+              onRestart: () {
+                setState(() {
+                  _currentScreen = Screen.welcome;
+                });
+              },
+            ),
+          },
         ),
       ),
     );
@@ -45,4 +67,3 @@ class _TemperatureAppState extends State<TemperatureApp> {
 void main() {
   runApp(const TemperatureApp());
 }
-

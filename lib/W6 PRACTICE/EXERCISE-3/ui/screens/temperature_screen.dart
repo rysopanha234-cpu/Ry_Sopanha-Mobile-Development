@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class TemperatureScreen extends StatefulWidget {
-  const TemperatureScreen({super.key});
+  final VoidCallback onDone;
+  final VoidCallback onBack;
+  const TemperatureScreen({super.key, required this.onDone , required this.onBack});
 
   @override
   State<TemperatureScreen> createState() => _TemperatureScreenState();
@@ -37,6 +39,14 @@ class _TemperatureScreenState extends State<TemperatureScreen> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                IconButton(
+                  onPressed: widget.onBack, 
+                  icon: const Icon(Icons.arrow_back, color: Colors.white)),
+              ],
+            ),
             const Icon(
               Icons.thermostat_outlined,
               size: 120,
@@ -70,6 +80,18 @@ class _TemperatureScreenState extends State<TemperatureScreen> {
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text("${input.toStringAsFixed(2)}°F"),
+            ),
+
+            const SizedBox(height: 40),
+            OutlinedButton(
+              onPressed: widget.onDone,
+              style: OutlinedButton.styleFrom(
+                side: const BorderSide(width: 1.0, color: Colors.white),
+              ),
+              child: const Text(
+                'Done',
+                style: TextStyle(color: Colors.white, fontSize: 15),
+              ),
             ),
           ],
         ),
